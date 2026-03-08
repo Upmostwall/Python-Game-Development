@@ -1,12 +1,10 @@
 import pgzrun
 import random
 
-from Circle import WIDTH
-
 font_options = (255,255,255)
 
-WDTH = 1000
-HEIGHT = 1000
+WIDTH = 1000
+HEIGHT = 800
 
 CENTER_X = WIDTH / 2
 CENTER_Y = HEIGHT / 2
@@ -53,7 +51,7 @@ def make_items(no_of_extra_items):
 
     return new_items
 
-def get_option_to_create():
+def get_option_to_create(no_of_extra_items):
     items_to_create = ["paper"]
 
     for i in range(0, no_of_extra_items):
@@ -64,7 +62,7 @@ def get_option_to_create():
 def create_items(items_to_create):
     new_items = []
     for option in items_to_create:
-        item = Actor(option + "img")
+        item = Actor(option + ".png")
         new_items.append(item)
     return new_items
 
