@@ -1,7 +1,7 @@
 import pgzrun
 import random
 
-font_options = (255,255,255)
+FONT_COLOR = (255,255,255)
 
 WIDTH = 800
 HEIGHT = 600
@@ -14,33 +14,32 @@ CENTER = (CENTER_X, CENTER_Y)
 FINAL_LEVEL = 6
 START_SPEED = 10
 
-ITEMS = ["star", "satellite"]
-
+COLORS = ["blue", "green", "orange", "purple", "yellow"]
 game_over = False
 game_complete = False
 current_level = 1
 
-items = []
+stars = [] 
 animations = []
 
 def draw():
-    global items, current_level, game_over, game_complete
+    global stars, current_level, game_over, game_complete
     screen.clear()
-    screen.blit("background", (0, 0))
+    screen.blit("bg3", (0, 0))
 
     if game_over:
         display_message("Game Over!", "Try Again!")
     elif game_complete:
         display_message("Congratulations!", "You completed the game!")
     else:
-        for item in items:
+        for item in stars:
             item.draw()
 
 def update():
-    global items
+    global stars
 
-    if len(items) == 0:
-        items = make_items(current_level)
+    if len(stars) == 0:
+        stars = make_items(current_level)
 
 def make_items(no_of_extra_items):
     items_to_create = get_option_to_create(no_of_extra_items)
@@ -52,17 +51,17 @@ def make_items(no_of_extra_items):
     return new_items
 
 def get_option_to_create(no_of_extra_items):
-    items_to_create = ["star"]
+    items_to_create = ["red"]
 
     for i in range(0, no_of_extra_items):
-        random_option = random.choice(ITEMS)
+        random_option = random.choice(COLORS)
         items_to_create.append(random_option)
     return items_to_create
 
 def create_items(items_to_create):
     new_items = []
     for option in items_to_create:
-        item = Actor(option + ".png")
+        item = Actor(option + "-star")
         new_items.append(item)
     return new_items
 
@@ -89,23 +88,23 @@ def handle_game_over():
     game_over = True
 
 def on_mouse_down(pos):
-    global items, current_level
+    global stars, current_level
 
-    for item in items:
+    for item in stars:
         if item.collidepoint(pos):
-            if "star" in item.image:
+            if "red" in item.image:
                 handle_game_complete()
             else:
                 handle_game_over()
 
 def handle_game_complete():
-    global current_level, items, animations, game_complete
+    global current_level, stars, animations, game_complete
     stop_animations(animations)
     if current_level == FINAL_LEVEL:
         game_complete = True
     else:
         current_level += 1
-        items = []
+        stars = []
         animations = []
 
 def stop_animations(animations_stop):
