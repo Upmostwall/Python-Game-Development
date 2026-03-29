@@ -6,7 +6,7 @@ HEIGHT = 650
 
 marquee_box = Rect(0,0,880,80)
 question_box = Rect(0,0,650,150)
-timer_box = Rect(0,0,200,150)
+timer_box = Rect(0,0,150,150)
 answer_box1 = Rect(0,0,300,150)
 answer_box2 = Rect(0,0,300,150)
 answer_box3 = Rect(0,0,300,150)
@@ -38,22 +38,29 @@ def draw():
     screen.clear()
     screen.fill(color = "black")
 
-    screen.draw.filled.rect(marquee_box, color = "black")
-    screen.draw.filled.rect(question_box, color = "navy blue")
-    screen.draw.filled.rect(timer_box, color = "navy blue")
-    screen.draw.filled.rect(skip_box, color = "dark green")
+    screen.draw.filled_rect(marquee_box, color = "black")
+    screen.draw.filled_rect(question_box, color = "navy blue")
+    screen.draw.filled_rect(timer_box, color = "navy blue")
+    screen.draw.filled_rect(skip_box, color = "dark green")
 
     for answer_box in answer_boxes:
-        screen.draw.filled.rect(answer_box, "dark orange")
+        screen.draw.filled_rect(answer_box, "dark orange")
 
     marquee_message = "Welcome to Quiz Master!"
     marquee_message += f"Q: {question_index} of {question_count}"
-    screen.draw.text(marquee_message, marquee_box, color="white")
+    screen.draw.textbox(marquee_message, marquee_box, color="white")
 
-    screen.draw.text(
+    screen.draw.textbox(
         str(time_left), timer_box,
         color = "white", shadow = (0.5, 0.5),
         scolor = "dim grey"
+    )
+    screen.draw.textbox("Skip", skip_box, color="black", angle=-90)
+   
+    screen.draw.textbox(
+        question[0].strip(), question_box,
+        color="white", shadow=(0.5, 0.5),
+        scolor="dim grey"
     )
 
     index = 1
@@ -65,7 +72,7 @@ def update():
     move_marquee()
     
 def move_marquee():
-    marquee_box.X -= 2
+    marquee_box.x -= 2
     if marquee_box.right < 0:
         marquee_box.left = WIDTH
 
@@ -84,7 +91,7 @@ def read_next_question():
         return q.split(",")
     else:
         game_over()
-        return ["GAME OVER", "-", "-", "-", "-", "-", "5"]
+        return ["GAME OVER", "-", "-", "-", "-", "5"]
         
 def on_mouse_down(pos):
     index= 1
@@ -121,6 +128,7 @@ def next_question():
 def game_over():
     global question, time_left, is_game_over
     message = f"Game Over!\nScore: {score}/{question_count}"
+    question = [message, "-", "-", "-", "-", "5"]
     time_left = 0
     is_game_over = True
 
@@ -142,4 +150,4 @@ def update_time_left():
 read_question_file()
 question = read_next_question()
 clock.schedule_interval(update_time_left, 1)
-pgzrun.go
+pgzrun.go()
