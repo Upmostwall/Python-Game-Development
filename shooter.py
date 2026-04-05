@@ -1,0 +1,100 @@
+import pgzrun
+import random
+
+WIDTH = 1200
+HEIGHT = 600
+
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+
+ship = Actor("ship")
+bug = Actor("bug")
+
+ship.pos = (WIDTH / 2, HEIGHT - 60)
+speed = 5
+bullets = []
+enemies = []
+
+for x in range(8):
+    for y in range(4):
+        enemies.append(Actor("bug")
+        enemies[-1].x = 100 + 50 * x
+        enemies[-1].y = 80 + 50 * y)
+
+score = 0
+direction = 1
+ship.dead = False
+ship.count = 90
+
+def displayScore():
+    screen.draw.text(str(score), (50,30))
+
+def gameOver():
+    screem.draw.text("Game Over", (WIDTH / 2 - 100, HEIGHT / 2), fontsize=60)
+
+def on_key_down(key):
+    if ship.dead == false:
+        if key == keys.SPACE:
+            bullets.append(Actor("bullet"))
+            bullets[-1].x = ship.x
+            bullets[-1].y = ship.y - 30
+
+def update():
+    global direction, score
+
+    moveDown = False
+
+    if ship.dead == False:
+        if keyboard.left:
+            ship.x -= speed
+
+            if ship.x <= 0:
+                ship.x = 0
+
+        if keyboard.right:
+            ship.x += speed
+
+            if ship.x >= WIDTH:
+                ship.x = WIDTH
+
+    for bullet in bullets:
+        bullet.y -= 10
+
+        if bullet.y < 0:
+            bullets.remove(bullet)
+
+        for enemy in enemies:
+            if bullet.y <= 0:
+                bullets.remove(bullet)
+            else:
+                bullet.y -= 10
+
+    if len(enemies) == 0:
+        gameOver()
+
+    if len(enemies) > 0 and (enemies[-1].x > WIDTH - 80 or enemies[0].x < 80):
+        moveDown = True
+        direction = direction * 1
+
+    for enemy in enemies:
+        enemy.x += 2 * direction
+
+        if moveDown:
+            enemy.y += 100
+
+        if enemy.y > HEIGHT:
+            enemies.remove(enemy)
+
+        for bullet in bullets:
+            if enemy.colliderect(bullet):
+                score += 10
+                enemies.remove(enemy)
+                bullets.remove(bullet)
+
+                if len(enemies) == 0:
+                    gameOver()
+                break
+
+
+        
+        
